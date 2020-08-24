@@ -2,6 +2,19 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 
 
+class Fields(models.Model):
+    FIELDS_CHOICES = (
+        ('Programming', 'Programming'),
+        ('Tailoring', 'Tailoring'),
+        ('Mechanical Engineering', 'Mechanical Engineering'),
+        ('Other', 'Other')
+    )
+    name = models.CharField(max_length=255, choices=FIELDS_CHOICES, null=False, blank=False)
+
+    def __str__(self):
+        return self.name
+
+
 class User(AbstractUser):
     USER_TYPE_CHOICES = (
         (1, 'Company'),
@@ -17,6 +30,7 @@ class CompanyProfile(models.Model):
     creation_year = models.IntegerField(blank=False, null=False)
     address = models.TextField(blank=False, null=False)
     number = models.CharField(max_length=11, blank=False, null=False)
+    fields = models.ManyToManyField(Fields, blank=True)
 
 
 class PersonProfile(models.Model):
@@ -30,5 +44,7 @@ class PersonProfile(models.Model):
     sex = models.CharField(max_length=1, choices=SEX_CHOICES)
     age = models.PositiveIntegerField(blank=False, null=False)
     resume = models.FileField(upload_to='Resumes/', blank=True, null=True)
+    fields = models.ManyToManyField(Fields, blank=True)
+
 
 
